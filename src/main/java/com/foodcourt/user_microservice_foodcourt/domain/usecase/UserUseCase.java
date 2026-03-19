@@ -18,6 +18,7 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void createOwner(User user) {
+
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
 
         user.setPassword(encryptedPassword);

@@ -1,0 +1,137 @@
+package com.foodcourt.user_microservice_foodcourt;
+
+import com.foodcourt.user_microservice_foodcourt.domain.exception.UnderageUserException;
+import com.foodcourt.user_microservice_foodcourt.domain.model.User;
+import com.foodcourt.user_microservice_foodcourt.domain.model.UserRole;
+import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
+import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
+import com.foodcourt.user_microservice_foodcourt.domain.usecase.UserUseCase;
+import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
+class CreateOwnerUseCaseTest {
+
+    @Mock
+    private IUserPersistencePort userPersistencePort;
+
+    @Mock
+    private IPasswordEncoderPort passwordEncoderPort;
+
+    @InjectMocks
+    private UserUseCase userUseCase;
+
+
+    @Test
+    void shouldCreateOwnerSuccessfully() {
+
+        User user = new User(
+                "Sebastian",
+                "Gomez",
+                123L,
+                "+573005698325",
+                LocalDate.of(2000,1,1),
+                "test@test.com",
+                "123456",
+                UserRole.PROPIETARIO
+        );
+
+        when(passwordEncoderPort.encode("123456"))
+                .thenReturn("encryptedPassword");
+
+        userUseCase.createOwner(user);
+
+        verify(passwordEncoderPort).encode("123456");
+        verify(userPersistencePort).createOwner(user);
+
+        assertEquals("encryptedPassword", user.getPassword());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserIsUnderage() {
+
+        User user = new User(
+                "Sebastian",
+                "Gomez",
+                123L,
+                "+573005698325",
+                LocalDate.of(2016,1,1),
+                "test@test.com",
+                "123456",
+                UserRole.PROPIETARIO
+        );
+
+        when(passwordEncoderPort.encode(anyString()))
+                .thenReturn("encryptedPassword");
+
+        assertThrows(UnderageUserException.class, () -> {
+            userUseCase.createOwner(user);
+        });
+
+        verify(userPersistencePort, never()).createOwner(any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserAlreadyExists() {
+
+        User user = new User(
+                "Sebastian",
+                "Gomez",
+                123L,
+                "+573005698325",
+                LocalDate.of(2000,1,1),
+                "test@test.com",
+                "123456",
+                UserRole.PROPIETARIO
+        );
+        
+        when(passwordEncoderPort.encode(anyString()))
+                .thenReturn("encryptedPassword");
+
+        doThrow(new UserAlreadyExistsException("User already exists"))
+                .when(userPersistencePort).createOwner(any());
+
+        assertThrows(UserAlreadyExistsException.class, () -> {
+            userUseCase.createOwner(user);
+        });
+
+        verify(passwordEncoderPort).encode("123456");
+    }
+
+    @Test
+    void shouldEncryptPasswordBeforeSaving() {
+
+        User user = new User(
+                "Sebastian",
+                "Gomez",
+                123L,
+                "+573005698325",
+                LocalDate.of(2000,1,1),
+                "test@test.com",
+                "123456",
+                UserRole.PROPIETARIO
+        );
+
+        when(passwordEncoderPort.encode("123456"))
+                .thenReturn("encryptedPassword");
+
+        userUseCase.createOwner(user);
+
+        assertEquals("encryptedPassword", user.getPassword());
+
+        assertNotEquals("123456", user.getPassword());
+
+        verify(userPersistencePort).createOwner(user);
+    }
+}
