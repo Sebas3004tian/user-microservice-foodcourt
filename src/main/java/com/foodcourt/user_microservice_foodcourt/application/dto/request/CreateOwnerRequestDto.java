@@ -21,7 +21,7 @@ public class CreateOwnerRequestDto {
     private Long id;
 
     @NotBlank(message="The phoneNumber cannot be empty")
-    @Pattern(regexp = "^\\+?[0-9]{1,13}$", message = "Invalid phone number")
+    @Pattern(regexp = "^\\+?\\d{1,13}$", message = "Invalid phone number")
     private String phoneNumber;
 
     @NotNull(message="The phoneNumber cannot be empty")
