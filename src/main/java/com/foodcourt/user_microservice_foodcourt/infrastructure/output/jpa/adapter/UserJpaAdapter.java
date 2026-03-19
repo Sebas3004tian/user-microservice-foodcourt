@@ -17,8 +17,15 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
     @Override
     public User createOwner(User user) {
+
         if (userRepository.findById(user.getId()).isPresent()){
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsException("User ID already exists");
+        }
+        if (userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException("User email already exist");
+        }
+        if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()){
+            throw new UserAlreadyExistsException("User phone number already exist");
         }
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
         return userEntityMapper.toUser(userEntity);

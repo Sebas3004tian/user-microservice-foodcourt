@@ -2,6 +2,7 @@ package com.foodcourt.user_microservice_foodcourt.infrastructure.input.rest;
 
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
     private final IUserHandler userHandler;
 
-    @PostMapping("/")
-    public ResponseEntity<Void> createOwner(@RequestBody CreateOwnerRequestDto ownerRequestDto){
+    @PostMapping("/owner")
+    public ResponseEntity<Void> createOwner(@Valid @RequestBody CreateOwnerRequestDto ownerRequestDto){
         userHandler.createOwner(ownerRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

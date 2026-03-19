@@ -4,5 +4,4 @@ import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 
 public interface IUserPersistencePort {
     User createOwner(User user);
-
 }
