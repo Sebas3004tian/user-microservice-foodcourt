@@ -1,51 +1,40 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import java.util.Collections;
+import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class TokenUtils {
 
-    private final static String ACCESS_TOKEN_SECRET = "hola";
-    private final static Long ACCESs_TOKEN_VALIDITY_SECONDS = 2_000_000L;
+    private final String secret = "my_super_secure_secret_key_123456";
+    private final Long validity = 2_000_000L;
 
-    public static String createToken(String nombre, String email){
-        long expirationTime = ACCESs_TOKEN_VALIDITY_SECONDS * 1_000;
+    public String createToken(String name, String email) {
+        long expirationTime = validity * 1_000;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
 
-        Map<String,Object> extra = new HashMap<>();
-        extra.put("name", nombre);
+        Map<String, Object> extra = new HashMap<>();
+        extra.put("name", name);
 
         return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(expirationDate)
                 .addClaims(extra)
-                .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 
-    public static UsernamePasswordAuthenticationToken getAuthentication (String token){
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String email = claims.getSubject();
-
-            return new UsernamePasswordAuthenticationToken(email,null, Collections.emptyList());
-        } catch (JwtException e){
-            return null;
-        }
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
-
-
 }

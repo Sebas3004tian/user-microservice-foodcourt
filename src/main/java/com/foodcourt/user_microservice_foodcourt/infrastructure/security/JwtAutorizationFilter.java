@@ -10,23 +10,44 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class JwtAutorizationFilter extends OncePerRequestFilter {
+
+    private final TokenUtils tokenUtils;
+
+    public JwtAutorizationFilter(TokenUtils tokenUtils) {
+        this.tokenUtils = tokenUtils;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-
         String bearerToken = request.getHeader("Authorization");
 
-        if (bearerToken!=null && bearerToken.startsWith("Bearer ")){
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+
             String token = bearerToken.replace("Bearer ", "");
-            UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(usernamePAT);
+
+            try {
+                var claims = tokenUtils.extractClaims(token);
+
+                String email = claims.getSubject();
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
+            } catch (Exception e) {
+                System.out.println("ERROR VALIDANDO TOKEN: " + e.getMessage()); // <--- MIRA TU CONSOLA
+                SecurityContextHolder.clearContext();
+            }
         }
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
     }
 }
