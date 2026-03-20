@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.domain.usecase;
 
+import com.foodcourt.user_microservice_foodcourt.application.exception.InvalidCredentialsException;
 import com.foodcourt.user_microservice_foodcourt.domain.api.IAuthServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
@@ -7,7 +8,6 @@ import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 public class AuthUseCase implements IAuthServicePort {
@@ -28,7 +28,7 @@ public class AuthUseCase implements IAuthServicePort {
                 .orElseThrow(() -> new UserAlreadyExistsException("User email already exist"));
 
         if (!passwordEncoderPort.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         return userPersistencePort.login(request);

@@ -3,7 +3,7 @@ package com.foodcourt.user_microservice_foodcourt.infrastructure.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,8 +12,11 @@ import java.util.Map;
 @Component
 public class TokenUtils {
 
-    private final String secret = "my_super_secure_secret_key_123456";
-    private final Long validity = 2_000_000L;
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.validity}")
+    private Long validity;
 
     public String createToken(String name, String email) {
         long expirationTime = validity * 1_000;

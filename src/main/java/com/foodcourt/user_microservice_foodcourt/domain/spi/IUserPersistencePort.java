@@ -3,7 +3,6 @@ package com.foodcourt.user_microservice_foodcourt.domain.spi;
 import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.entity.UserEntity;
 
 import java.util.Optional;
 
