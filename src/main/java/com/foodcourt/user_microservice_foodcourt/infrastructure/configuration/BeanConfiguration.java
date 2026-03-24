@@ -66,7 +66,6 @@ public class BeanConfiguration {
     public IAuthServicePort authServicePort(){
         return new AuthUseCase(
                 userPersistencePort(),
-                rolePersistencePort(),
                 passwordEncoderPort(),
                 jwtServicePort()
         );

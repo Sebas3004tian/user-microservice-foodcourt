@@ -61,7 +61,7 @@ class CreateOwnerUseCaseTest {
         userUseCase.createOwner(user);
 
         verify(passwordEncoderPort).encode("123456");
-        verify(userPersistencePort).createOwner(user);
+        verify(userPersistencePort).createUser(user);
 
         assertEquals("encryptedPassword", user.getPassword());
     }
@@ -90,7 +90,7 @@ class CreateOwnerUseCaseTest {
             userUseCase.createOwner(user);
         });
 
-        verify(userPersistencePort, never()).createOwner(any());
+        verify(userPersistencePort, never()).createUser(any());
     }
 
     @Test
@@ -114,7 +114,7 @@ class CreateOwnerUseCaseTest {
                 .thenReturn("encryptedPassword");
 
         doThrow(new UserAlreadyExistsException("User already exists"))
-                .when(userPersistencePort).createOwner(any());
+                .when(userPersistencePort).createUser(any());
 
         assertThrows(UserAlreadyExistsException.class, () -> {
             userUseCase.createOwner(user);
@@ -149,6 +149,6 @@ class CreateOwnerUseCaseTest {
 
         assertNotEquals("123456", user.getPassword());
 
-        verify(userPersistencePort).createOwner(user);
+        verify(userPersistencePort).createUser(user);
     }
 }

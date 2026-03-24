@@ -3,7 +3,6 @@ package com.foodcourt.user_microservice_foodcourt;
 import com.foodcourt.user_microservice_foodcourt.domain.model.*;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
-import com.foodcourt.user_microservice_foodcourt.domain.spi.IRolePersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.usecase.AuthUseCase;
 import org.junit.jupiter.api.Test;
