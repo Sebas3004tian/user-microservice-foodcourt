@@ -8,5 +8,5 @@ public interface IUserPersistencePort {
     Optional<User> findOneById(Long id);
     Optional<User> findOneByEmail(String email);
     Optional<User> findOneByPhoneNumber(String phoneNumber);
-    User createOwner(User user);
+    User createUser(User user);
 }

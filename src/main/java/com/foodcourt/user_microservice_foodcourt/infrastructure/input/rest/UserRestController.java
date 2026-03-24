@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.input.rest;
 
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,10 +28,25 @@ public class UserRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
             @ApiResponse(responseCode = "409", description = "User already exists")
     })
     public ResponseEntity<Void> createOwner(@Valid @RequestBody CreateOwnerRequestDto ownerRequestDto){
         userHandler.createOwner(ownerRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
+    @PostMapping("/employee")
+    @Operation(summary = "Create an employee user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
+            @ApiResponse(responseCode = "409", description = "User already exists")
+    })
+    public ResponseEntity<Void> createEmployee(@Valid @RequestBody CreateEmployeeRequestDto employeeRequestDto){
+        userHandler.createEmployee(employeeRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

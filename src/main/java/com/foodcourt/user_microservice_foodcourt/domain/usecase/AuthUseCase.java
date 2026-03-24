@@ -4,25 +4,20 @@ import com.foodcourt.user_microservice_foodcourt.domain.exception.InvalidCredent
 import com.foodcourt.user_microservice_foodcourt.domain.api.IAuthServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
-import com.foodcourt.user_microservice_foodcourt.domain.model.Role;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
-import com.foodcourt.user_microservice_foodcourt.domain.spi.IRolePersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.RoleNotFoundException;
 
 
 public class AuthUseCase implements IAuthServicePort {
 
     private final IUserPersistencePort userPersistencePort;
-    private final IRolePersistencePort rolePersistencePort;
     private final IPasswordEncoderPort passwordEncoderPort;
     private final IJwtServicePort jwtServicePort;
 
-    public AuthUseCase(IUserPersistencePort userPersistencePort, IRolePersistencePort rolePersistencePort, IPasswordEncoderPort passwordEncoderPort, IJwtServicePort jwtServicePort) {
+    public AuthUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort, IJwtServicePort jwtServicePort) {
         this.userPersistencePort = userPersistencePort;
-        this.rolePersistencePort = rolePersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
         this.jwtServicePort = jwtServicePort;
     }

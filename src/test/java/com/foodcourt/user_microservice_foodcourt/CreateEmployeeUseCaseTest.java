@@ -1,6 +1,5 @@
 package com.foodcourt.user_microservice_foodcourt;
 
-import com.foodcourt.user_microservice_foodcourt.domain.exception.UnderageUserException;
 import com.foodcourt.user_microservice_foodcourt.domain.model.Role;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
@@ -21,9 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
-class CreateOwnerUseCaseTest {
+class CreateEmployeeUseCaseTest {
 
     @Mock
     private IUserPersistencePort userPersistencePort;
@@ -37,28 +35,29 @@ class CreateOwnerUseCaseTest {
     @InjectMocks
     private UserUseCase userUseCase;
 
-
     @Test
-    void shouldCreateOwnerSuccessfully() {
+    void shouldCreateEmployeeSuccessfully() {
 
-        Role role = new Role(2L,"PROPIETARIO");
+        Role role = new Role(3L, "EMPLEADO");
+
         User user = new User(
                 "Sebastian",
                 "Gomez",
                 123L,
                 "+573005698325",
-                LocalDate.of(2000,1,1),
+                LocalDate.of(2016,1,1), // 👈 puede ser menor
                 "test@test.com",
                 "123456",
                 role
         );
-        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+
+        when(rolePersistencePort.findOneByName("EMPLEADO"))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
 
-        userUseCase.createOwner(user);
+        userUseCase.createEmployee(user);
 
         verify(passwordEncoderPort).encode("123456");
         verify(userPersistencePort).createUser(user);
@@ -67,36 +66,10 @@ class CreateOwnerUseCaseTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUserIsUnderage() {
+    void shouldThrowExceptionWhenEmployeeAlreadyExists() {
 
-        Role role = new Role(2L,"PROPIETARIO");
-        User user = new User(
-                "Sebastian",
-                "Gomez",
-                123L,
-                "+573005698325",
-                LocalDate.of(2016,1,1),
-                "test@test.com",
-                "123456",
-                role
-        );
-        when(rolePersistencePort.findOneByName("PROPIETARIO"))
-                .thenReturn(Optional.of(role));
+        Role role = new Role(3L, "EMPLEADO");
 
-        when(passwordEncoderPort.encode(anyString()))
-                .thenReturn("encryptedPassword");
-
-        assertThrows(UnderageUserException.class, () -> {
-            userUseCase.createOwner(user);
-        });
-
-        verify(userPersistencePort, never()).createUser(any());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUserAlreadyExists() {
-
-        Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -107,9 +80,10 @@ class CreateOwnerUseCaseTest {
                 "123456",
                 role
         );
-        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+
+        when(rolePersistencePort.findOneByName("EMPLEADO"))
                 .thenReturn(Optional.of(role));
-        
+
         when(passwordEncoderPort.encode(anyString()))
                 .thenReturn("encryptedPassword");
 
@@ -117,16 +91,17 @@ class CreateOwnerUseCaseTest {
                 .when(userPersistencePort).createUser(any());
 
         assertThrows(UserAlreadyExistsException.class, () -> {
-            userUseCase.createOwner(user);
+            userUseCase.createEmployee(user);
         });
 
         verify(passwordEncoderPort).encode("123456");
     }
 
     @Test
-    void shouldEncryptPasswordBeforeSaving() {
+    void shouldEncryptPasswordBeforeSavingEmployee() {
 
-        Role role = new Role(2L,"PROPIETARIO");
+        Role role = new Role(3L, "EMPLEADO");
+
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -137,16 +112,16 @@ class CreateOwnerUseCaseTest {
                 "123456",
                 role
         );
-        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+
+        when(rolePersistencePort.findOneByName("EMPLEADO"))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
 
-        userUseCase.createOwner(user);
+        userUseCase.createEmployee(user);
 
         assertEquals("encryptedPassword", user.getPassword());
-
         assertNotEquals("123456", user.getPassword());
 
         verify(userPersistencePort).createUser(user);
