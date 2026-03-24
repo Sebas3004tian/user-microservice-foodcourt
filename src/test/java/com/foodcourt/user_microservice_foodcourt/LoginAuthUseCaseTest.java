@@ -1,6 +1,5 @@
 package com.foodcourt.user_microservice_foodcourt;
 
-import com.foodcourt.user_microservice_foodcourt.domain.exception.UnderageUserException;
 import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
@@ -82,9 +81,10 @@ class LoginAuthUseCaseTest {
         when(userPersistencePort.findOneByEmail("test@test.com"))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
-            authUseCase.login(new LoginRequest ("test@test.com", "123456"));
-        });
+        LoginRequest loginRequest = new LoginRequest("test@test.com", "123456");
+
+        assertThrows(RuntimeException.class,
+                () -> authUseCase.login(loginRequest));
 
         verify(passwordEncoderPort, never()).matches(any(), any());
         verify(jwtServicePort, never()).generateToken(any(), any(), any());
@@ -110,9 +110,10 @@ class LoginAuthUseCaseTest {
         when(passwordEncoderPort.matches("123456", "encryptedPassword"))
                 .thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> {
-            authUseCase.login(new LoginRequest ("test@test.com", "123456"));
-        });
+        LoginRequest loginRequest = new LoginRequest("test@test.com", "123456");
+
+        assertThrows(RuntimeException.class,
+                () -> authUseCase.login(loginRequest));
 
         verify(jwtServicePort, never()).generateToken(any(), any(), any());
     }
