@@ -14,9 +14,10 @@ import java.time.Period;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+    private Long id;
     private String name;
     private String lastName;
-    private Long id;
+    private Long identificationNumber;
     private String phoneNumber;
     private LocalDate birthDate;
     private String email;

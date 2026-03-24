@@ -64,9 +64,9 @@ public class DataInitializer {
                         .orElseThrow(() -> new RoleNotFoundException("Role ADMIN not found"));
 
                 UserEntity admin = new UserEntity();
-                admin.setId(1L);
                 admin.setName("Admin");
                 admin.setLastName("Admin");
+                admin.setIdentificationNumber(1L);
                 admin.setPhoneNumber("+1");
                 admin.setEmail(adminEmail);
                 admin.setPassword(passwordEncoder.encode("admin"));

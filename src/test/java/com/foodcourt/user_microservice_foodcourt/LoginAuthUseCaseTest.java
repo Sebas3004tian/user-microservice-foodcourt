@@ -40,6 +40,7 @@ class LoginAuthUseCaseTest {
         Role role = new Role(1L,"ADMIN");
 
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,
@@ -94,6 +95,7 @@ class LoginAuthUseCaseTest {
 
         Role role = new Role(1L,"ADMIN");
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,
