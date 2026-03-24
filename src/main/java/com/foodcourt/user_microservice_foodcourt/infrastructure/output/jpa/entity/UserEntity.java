@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class UserEntity {
-
+    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -24,6 +25,9 @@ public class UserEntity {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "identification_number",unique = true, nullable = false)
+    private Long identificationNumber;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;

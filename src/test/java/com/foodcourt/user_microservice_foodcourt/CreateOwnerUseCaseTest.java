@@ -43,6 +43,7 @@ class CreateOwnerUseCaseTest {
 
         Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,
@@ -71,11 +72,12 @@ class CreateOwnerUseCaseTest {
 
         Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,
                 "+573005698325",
-                LocalDate.of(2016,1,1),
+                LocalDate.of(2020,1,1),
                 "test@test.com",
                 "123456",
                 role
@@ -98,6 +100,7 @@ class CreateOwnerUseCaseTest {
 
         Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,
@@ -128,6 +131,7 @@ class CreateOwnerUseCaseTest {
 
         Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
+                1L,
                 "Sebastian",
                 "Gomez",
                 123L,

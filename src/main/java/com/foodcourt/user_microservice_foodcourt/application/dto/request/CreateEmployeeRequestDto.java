@@ -14,9 +14,9 @@ public class CreateEmployeeRequestDto {
     @NotBlank(message="The lastName cannot be empty")
     private String lastName;
 
-    @NotNull(message="The id cannot be empty")
-    @Positive(message="The id cannot be negative")
-    private Long id;
+    @NotNull(message="The identificationNumber cannot be empty")
+    @Positive(message="The identificationNumber cannot be negative")
+    private Long identificationNumber;
 
     @NotBlank(message="The phoneNumber cannot be empty")
     @Pattern(regexp = "^\\+?\\d{1,13}$", message = "Invalid phone number")
