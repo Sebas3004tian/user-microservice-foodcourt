@@ -21,8 +21,7 @@ public class User {
     private LocalDate birthDate;
     private String email;
     private String password;
-
-    private UserRole role;
+    private Role role;
 
     public void validateAdult() {
         if (Period.between(birthDate, LocalDate.now()).getYears() < 18) {

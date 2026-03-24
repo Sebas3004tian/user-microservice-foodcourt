@@ -1,9 +1,10 @@
 package com.foodcourt.user_microservice_foodcourt;
 
 import com.foodcourt.user_microservice_foodcourt.domain.exception.UnderageUserException;
+import com.foodcourt.user_microservice_foodcourt.domain.model.Role;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
-import com.foodcourt.user_microservice_foodcourt.domain.model.UserRole;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
+import com.foodcourt.user_microservice_foodcourt.domain.spi.IRolePersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.usecase.UserUseCase;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,6 +29,9 @@ class CreateOwnerUseCaseTest {
     private IUserPersistencePort userPersistencePort;
 
     @Mock
+    private IRolePersistencePort rolePersistencePort;
+
+    @Mock
     private IPasswordEncoderPort passwordEncoderPort;
 
     @InjectMocks
@@ -36,6 +41,7 @@ class CreateOwnerUseCaseTest {
     @Test
     void shouldCreateOwnerSuccessfully() {
 
+        Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -44,8 +50,10 @@ class CreateOwnerUseCaseTest {
                 LocalDate.of(2000,1,1),
                 "test@test.com",
                 "123456",
-                UserRole.PROPIETARIO
+                role
         );
+        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+                .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
@@ -61,6 +69,7 @@ class CreateOwnerUseCaseTest {
     @Test
     void shouldThrowExceptionWhenUserIsUnderage() {
 
+        Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -69,8 +78,10 @@ class CreateOwnerUseCaseTest {
                 LocalDate.of(2016,1,1),
                 "test@test.com",
                 "123456",
-                UserRole.PROPIETARIO
+                role
         );
+        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+                .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode(anyString()))
                 .thenReturn("encryptedPassword");
@@ -85,6 +96,7 @@ class CreateOwnerUseCaseTest {
     @Test
     void shouldThrowExceptionWhenUserAlreadyExists() {
 
+        Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -93,8 +105,10 @@ class CreateOwnerUseCaseTest {
                 LocalDate.of(2000,1,1),
                 "test@test.com",
                 "123456",
-                UserRole.PROPIETARIO
+                role
         );
+        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+                .thenReturn(Optional.of(role));
         
         when(passwordEncoderPort.encode(anyString()))
                 .thenReturn("encryptedPassword");
@@ -112,6 +126,7 @@ class CreateOwnerUseCaseTest {
     @Test
     void shouldEncryptPasswordBeforeSaving() {
 
+        Role role = new Role(2L,"PROPIETARIO");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -120,8 +135,10 @@ class CreateOwnerUseCaseTest {
                 LocalDate.of(2000,1,1),
                 "test@test.com",
                 "123456",
-                UserRole.PROPIETARIO
+                role
         );
+        when(rolePersistencePort.findOneByName("PROPIETARIO"))
+                .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
