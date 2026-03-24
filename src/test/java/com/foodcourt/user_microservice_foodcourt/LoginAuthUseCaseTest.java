@@ -1,11 +1,9 @@
 package com.foodcourt.user_microservice_foodcourt;
 
-import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
-import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
-import com.foodcourt.user_microservice_foodcourt.domain.model.User;
-import com.foodcourt.user_microservice_foodcourt.domain.model.UserRole;
+import com.foodcourt.user_microservice_foodcourt.domain.model.*;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
+import com.foodcourt.user_microservice_foodcourt.domain.spi.IRolePersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.usecase.AuthUseCase;
 import org.junit.jupiter.api.Test;
@@ -40,6 +38,8 @@ class LoginAuthUseCaseTest {
     @Test
     void shouldLoginSuccessfully() {
 
+        Role role = new Role(1L,"ADMIN");
+
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -48,7 +48,7 @@ class LoginAuthUseCaseTest {
                 LocalDate.of(2000,1,1),
                 "test@test.com",
                 "encryptedPassword",
-                UserRole.ADMIN
+                role
         );
 
         when(userPersistencePort.findOneByEmail("test@test.com"))
@@ -71,7 +71,7 @@ class LoginAuthUseCaseTest {
         verify(jwtServicePort).generateToken(
                 user.getName(),
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().getName()
         );
     }
 
@@ -93,6 +93,7 @@ class LoginAuthUseCaseTest {
     @Test
     void shouldThrowExceptionWhenPasswordIsInvalid() {
 
+        Role role = new Role(1L,"ADMIN");
         User user = new User(
                 "Sebastian",
                 "Gomez",
@@ -101,7 +102,7 @@ class LoginAuthUseCaseTest {
                 LocalDate.of(2000,1,1),
                 "test@test.com",
                 "encryptedPassword",
-                UserRole.ADMIN
+                role
         );
 
         when(userPersistencePort.findOneByEmail("test@test.com"))

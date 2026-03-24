@@ -1,6 +1,5 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.entity;
 
-import com.foodcourt.user_microservice_foodcourt.domain.model.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,13 +22,13 @@ public class UserEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Column(nullable = false, unique = true)
@@ -38,9 +37,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
 
 
 }
