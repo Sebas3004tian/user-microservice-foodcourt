@@ -12,7 +12,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,38 +34,59 @@ public class ControllerAdvisor {
 
         Map<String, Object> response = new HashMap<>();
         response.put(ERROR, ExceptionResponse.VALIDATION_ERROR.getMessage());
-        response.put("details", fieldErrors);
+        response.put(MESSAGE, fieldErrors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.ACCESS_DENIED.getMessage()));
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.ACCESS_DENIED.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_CREDENTIALS.getMessage()));
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.INVALID_CREDENTIALS.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(SecurityConfigurationException.class)
     public ResponseEntity<Map<String, String>> handleSecurityConfigurationException(SecurityConfigurationException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.SECURITY_CONFIGURATION_ERROR.getMessage()));
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.SECURITY_CONFIGURATION_ERROR.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_ALREADY_EXISTS.getMessage()));
+
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.USER_ALREADY_EXISTS.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(UnderageUserException.class)
     public ResponseEntity<Map<String, String>> handleUnderageUserException(UnderageUserException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.UNDERAGE_USER.getMessage()));
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.UNDERAGE_USER.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 }
