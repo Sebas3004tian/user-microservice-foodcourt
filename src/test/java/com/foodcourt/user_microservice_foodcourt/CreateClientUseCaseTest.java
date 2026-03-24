@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CreateEmployeeUseCaseTest {
+class CreateClientUseCaseTest {
 
     @Mock
     private IUserPersistencePort userPersistencePort;
@@ -36,9 +36,9 @@ class CreateEmployeeUseCaseTest {
     private UserUseCase userUseCase;
 
     @Test
-    void shouldCreateEmployeeSuccessfully() {
+    void shouldCreateClientSuccessfully() {
 
-        Role role = new Role(3L, "EMPLEADO");
+        Role role = new Role(3L, "CLIENTE");
 
         User user = new User(
                 "Sebastian",
@@ -51,13 +51,13 @@ class CreateEmployeeUseCaseTest {
                 role
         );
 
-        when(rolePersistencePort.findOneByName("EMPLEADO"))
+        when(rolePersistencePort.findOneByName("CLIENTE"))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
 
-        userUseCase.createEmployee(user);
+        userUseCase.createClient(user);
 
         verify(passwordEncoderPort).encode("123456");
         verify(userPersistencePort).createUser(user);
@@ -66,9 +66,9 @@ class CreateEmployeeUseCaseTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenEmployeeAlreadyExists() {
+    void shouldThrowExceptionWhenClientAlreadyExists() {
 
-        Role role = new Role(3L, "EMPLEADO");
+        Role role = new Role(3L, "CLIENTE");
 
         User user = new User(
                 "Sebastian",
@@ -81,7 +81,7 @@ class CreateEmployeeUseCaseTest {
                 role
         );
 
-        when(rolePersistencePort.findOneByName("EMPLEADO"))
+        when(rolePersistencePort.findOneByName("CLIENTE"))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode(anyString()))
@@ -91,16 +91,16 @@ class CreateEmployeeUseCaseTest {
                 .when(userPersistencePort).createUser(any());
 
         assertThrows(UserAlreadyExistsException.class, () -> {
-            userUseCase.createEmployee(user);
+            userUseCase.createClient(user);
         });
 
         verify(passwordEncoderPort).encode("123456");
     }
 
     @Test
-    void shouldEncryptPasswordBeforeSavingEmployee() {
+    void shouldEncryptPasswordBeforeSavingClient() {
 
-        Role role = new Role(3L, "EMPLEADO");
+        Role role = new Role(3L, "CLIENTE");
 
         User user = new User(
                 "Sebastian",
@@ -113,13 +113,13 @@ class CreateEmployeeUseCaseTest {
                 role
         );
 
-        when(rolePersistencePort.findOneByName("EMPLEADO"))
+        when(rolePersistencePort.findOneByName("CLIENTE"))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoderPort.encode("123456"))
                 .thenReturn("encryptedPassword");
 
-        userUseCase.createEmployee(user);
+        userUseCase.createClient(user);
 
         assertEquals("encryptedPassword", user.getPassword());
         assertNotEquals("123456", user.getPassword());
