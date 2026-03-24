@@ -1,23 +1,25 @@
 package com.foodcourt.user_microservice_foodcourt.domain.usecase;
 
-import com.foodcourt.user_microservice_foodcourt.application.exception.InvalidCredentialsException;
+import com.foodcourt.user_microservice_foodcourt.domain.exception.InvalidCredentialsException;
 import com.foodcourt.user_microservice_foodcourt.domain.api.IAuthServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
+import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
 
 
 public class AuthUseCase implements IAuthServicePort {
 
     private final IUserPersistencePort userPersistencePort;
     private final IPasswordEncoderPort passwordEncoderPort;
+    private final IJwtServicePort jwtServicePort;
 
-    public AuthUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort) {
+    public AuthUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort, IJwtServicePort jwtServicePort) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
+        this.jwtServicePort = jwtServicePort;
     }
 
 
@@ -25,12 +27,18 @@ public class AuthUseCase implements IAuthServicePort {
     public AuthResponse login(LoginRequest request) {
 
         User user = userPersistencePort.findOneByEmail(request.getEmail())
-                .orElseThrow(() -> new UserAlreadyExistsException("User email already exist"));
+                .orElseThrow(() -> new InvalidCredentialsException("User not found, check credentials"));
 
         if (!passwordEncoderPort.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid credentials");
         }
 
-        return userPersistencePort.login(request);
+        String token = jwtServicePort.generateToken(
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name()
+        );
+
+        return new AuthResponse(token);
     }
 }

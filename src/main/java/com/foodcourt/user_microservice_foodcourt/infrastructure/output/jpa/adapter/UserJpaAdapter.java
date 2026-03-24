@@ -1,14 +1,11 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.adapter;
 
-import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
-import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.entity.UserEntity;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.mapper.IUserEntityMapper;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.repository.IUserRepository;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.security.TokenUtils;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -19,8 +16,6 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
 
     private final IUserEntityMapper userEntityMapper;
-
-    private final TokenUtils tokenUtils;
 
     @Override
     public Optional<User> findOneByEmail(String email) {
@@ -48,12 +43,5 @@ public class UserJpaAdapter implements IUserPersistencePort {
         }
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
         return userEntityMapper.toUser(userEntity);
-    }
-
-    @Override
-    public AuthResponse login(LoginRequest request) {
-        String token = tokenUtils.createToken(request.getEmail(),request.getPassword());
-
-        return new AuthResponse(token);
     }
 }

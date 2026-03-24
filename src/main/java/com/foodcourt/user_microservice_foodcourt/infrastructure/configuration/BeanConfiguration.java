@@ -26,17 +26,17 @@ public class BeanConfiguration {
 
     @Bean
     public IUserPersistencePort userPersistencePort(){
-        return new UserJpaAdapter(userRepository,userEntityMapper,tokenUtils);
+        return new UserJpaAdapter(userRepository,userEntityMapper);
+    }
+
+    @Bean
+    public IJwtServicePort jwtServicePort(){
+        return new JwtServiceAdapter(tokenUtils);
     }
 
     @Bean
     public IPasswordEncoderPort passwordEncoderPort(){
         return new BCryptPasswordEncoderAdapter();
-    }
-
-    @Bean
-    public IJwtServicePort jwtServicePort(TokenUtils tokenUtils){
-        return new JwtServiceAdapter(tokenUtils);
     }
 
     @Bean
@@ -51,7 +51,8 @@ public class BeanConfiguration {
     public IAuthServicePort authServicePort(){
         return new AuthUseCase(
                 userPersistencePort(),
-                passwordEncoderPort()
+                passwordEncoderPort(),
+                jwtServicePort()
         );
     }
 
