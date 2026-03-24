@@ -1,4 +1,4 @@
-package com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.adapter;
+package com.foodcourt.user_microservice_foodcourt.infrastructure.output.security.adapter;
 
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.security.TokenUtils;

@@ -7,7 +7,7 @@ import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.domain.usecase.AuthUseCase;
 import com.foodcourt.user_microservice_foodcourt.domain.usecase.UserUseCase;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.adapter.JwtServiceAdapter;
+import com.foodcourt.user_microservice_foodcourt.infrastructure.output.security.adapter.JwtServiceAdapter;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.adapter.UserJpaAdapter;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.mapper.IUserEntityMapper;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.repository.IUserRepository;
