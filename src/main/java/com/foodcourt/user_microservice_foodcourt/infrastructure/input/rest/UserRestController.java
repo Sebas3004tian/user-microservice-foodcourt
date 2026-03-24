@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.input.rest;
 
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateClientRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
@@ -47,6 +48,19 @@ public class UserRestController {
     })
     public ResponseEntity<Void> createEmployee(@Valid @RequestBody CreateEmployeeRequestDto employeeRequestDto){
         userHandler.createEmployee(employeeRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/client")
+    @Operation(summary = "Create an client user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
+            @ApiResponse(responseCode = "409", description = "User already exists")
+    })
+    public ResponseEntity<Void> createClient(@Valid @RequestBody CreateClientRequestDto createClientRequestDto){
+        userHandler.createClient(createClientRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

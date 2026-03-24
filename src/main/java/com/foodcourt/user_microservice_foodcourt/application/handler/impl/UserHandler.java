@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.application.handler.impl;
 
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateClientRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
@@ -28,5 +29,11 @@ public class UserHandler implements IUserHandler {
     public void createEmployee(CreateEmployeeRequestDto employeeRequestDto){
         User user = userRequestMapper.toEmployee(employeeRequestDto);
         userServicePort.createEmployee(user);
+    }
+
+    @Override
+    public void createClient(CreateClientRequestDto createClientRequestDto){
+        User user = userRequestMapper.toClient(createClientRequestDto);
+        userServicePort.createClient(user);
     }
 }
