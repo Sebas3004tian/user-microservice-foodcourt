@@ -31,6 +31,11 @@ public class UserUseCase implements IUserServicePort {
         createUserWithRole(user, "EMPLEADO", false);
     }
 
+    @Override
+    public void createClient(User user){
+        createUserWithRole(user, "CLIENTE",false);
+    }
+
     private void createUserWithRole(User user, String roleName, boolean validateAdult) {
 
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());

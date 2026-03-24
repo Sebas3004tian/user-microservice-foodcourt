@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.application.mapper;
 
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateClientRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
@@ -12,4 +13,5 @@ import org.mapstruct.ReportingPolicy;
 public interface IUserRequestMapper {
     User toOwner(CreateOwnerRequestDto ownerRequestDto);
     User toEmployee(CreateEmployeeRequestDto employeeRequestDto);
+    User toClient(CreateClientRequestDto createClientRequestDto);
 }
