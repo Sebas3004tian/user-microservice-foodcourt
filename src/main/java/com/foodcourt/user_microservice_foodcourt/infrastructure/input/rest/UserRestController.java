@@ -22,12 +22,11 @@ public class UserRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/role")
-    @Operation(summary = "Create an owner user")
+    @Operation(summary = "Get the role of some user with the user Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "200", description = "The server has responded to the user's role."),
             @ApiResponse(responseCode = "403", description = "Access Denied"),
-            @ApiResponse(responseCode = "409", description = "User already exists")
+            @ApiResponse(responseCode = "409", description = "User not found")
     })
     public ResponseEntity<String> getUserRole(@PathVariable Long id){
         return ResponseEntity.ok(userHandler.getUserRoleById(id));
