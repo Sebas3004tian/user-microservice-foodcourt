@@ -20,6 +20,11 @@ public class UserHandler implements IUserHandler {
     private final IUserRequestMapper userRequestMapper;
 
     @Override
+    public String getUserRoleById(Long id){
+        return userServicePort.getUserRoleById(id);
+    }
+
+    @Override
     public void createOwner(CreateOwnerRequestDto ownerRequestDto) {
         User user = userRequestMapper.toOwner(ownerRequestDto);
         userServicePort.createOwner(user);

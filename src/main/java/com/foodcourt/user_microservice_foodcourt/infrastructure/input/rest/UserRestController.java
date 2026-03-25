@@ -12,16 +12,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserRestController {
     private final IUserHandler userHandler;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}/role")
+    @Operation(summary = "Get the role of some user with the user Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The server has responded to the user's role."),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
+            @ApiResponse(responseCode = "409", description = "User not found")
+    })
+    public ResponseEntity<String> getUserRole(@PathVariable Long id){
+        return ResponseEntity.ok(userHandler.getUserRoleById(id));
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/owner")

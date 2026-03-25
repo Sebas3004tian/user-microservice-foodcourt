@@ -3,6 +3,7 @@ package com.foodcourt.user_microservice_foodcourt.infrastructure.exceptionhandle
 public enum ExceptionResponse {
 
     VALIDATION_ERROR("Validation error"),
+    USER_NOT_FOUND("User not found"),
     ACCESS_DENIED("You do not have permission to access this resource"),
     INVALID_CREDENTIALS("Invalid credentials"),
     SECURITY_CONFIGURATION_ERROR("Error configuring security"),

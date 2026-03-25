@@ -8,4 +8,5 @@ public interface IUserHandler {
     void createOwner(CreateOwnerRequestDto ownerRequestDto);
     void createEmployee(CreateEmployeeRequestDto employeeRequestDto);
     void createClient(CreateClientRequestDto createClientRequestDto);
+    String getUserRoleById(Long id);
 }
