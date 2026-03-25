@@ -18,16 +18,17 @@ public class TokenUtils {
     @Value("${jwt.validity}")
     private Long validity;
 
-    public String createToken(String name, String email, String role) {
+    public String createToken(Long id,String name, String email, String role) {
         long expirationTime = validity * 1_000;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
 
         Map<String, Object> extra = new HashMap<>();
         extra.put("name", name);
+        extra.put("email", email);
         extra.put("role", role);
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(id))
                 .setExpiration(expirationDate)
                 .addClaims(extra)
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
