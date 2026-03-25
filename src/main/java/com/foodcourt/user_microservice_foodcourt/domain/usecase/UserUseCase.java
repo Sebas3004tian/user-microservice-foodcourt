@@ -50,8 +50,8 @@ public class UserUseCase implements IUserServicePort {
             user.validateAdult();
         }
 
-        if (userPersistencePort.findOneById(user.getId()).isPresent()) {
-            throw new UserAlreadyExistsException("User ID already exists");
+        if (userPersistencePort.findOneById(user.getIdentificationNumber()).isPresent()) {
+            throw new UserAlreadyExistsException("User identification already exists");
         }
 
         if (userPersistencePort.findOneByEmail(user.getEmail()).isPresent()) {
