@@ -17,8 +17,19 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final IUserEntityMapper userEntityMapper;
 
     @Override
-    public Optional<User> findOneById(Long id) {
+    public Optional<String> getUserRoleById(Long id) {
+        return userRepository.findRoleByUserId(id);
+    }
+
+    @Override
+    public Optional<User> findOneById(Long id){
         return userRepository.findById(id)
+                .map(userEntityMapper::toUser);
+    }
+
+    @Override
+    public Optional<User> findOneByIdentificationNumber(Long identificationNumber) {
+        return userRepository.findOneByIdentificationNumber(identificationNumber)
                 .map(userEntityMapper::toUser);
     }
 

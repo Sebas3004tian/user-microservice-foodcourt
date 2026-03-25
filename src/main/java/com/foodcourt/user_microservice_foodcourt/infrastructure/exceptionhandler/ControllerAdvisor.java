@@ -4,6 +4,7 @@ import com.foodcourt.user_microservice_foodcourt.domain.exception.InvalidCredent
 import com.foodcourt.user_microservice_foodcourt.domain.exception.UnderageUserException;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.SecurityConfigurationException;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
+import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -37,6 +38,16 @@ public class ControllerAdvisor {
         response.put(MESSAGE, fieldErrors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException ex) {
+        Map<String, String> response = Map.of(
+                ERROR, ExceptionResponse.USER_NOT_FOUND.getMessage(),
+                MESSAGE, ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

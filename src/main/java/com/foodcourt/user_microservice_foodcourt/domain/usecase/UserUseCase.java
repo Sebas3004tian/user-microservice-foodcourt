@@ -8,6 +8,7 @@ import com.foodcourt.user_microservice_foodcourt.domain.spi.IRolePersistencePort
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IUserPersistencePort;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.RoleNotFoundException;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserAlreadyExistsException;
+import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.UserNotFoundException;
 
 public class UserUseCase implements IUserServicePort {
 
@@ -19,6 +20,14 @@ public class UserUseCase implements IUserServicePort {
         this.userPersistencePort=userPersistencePort;
         this.rolePersistencePort = rolePersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
+    }
+
+    @Override
+    public String getUserRoleById(Long id){
+        return userPersistencePort.getUserRoleById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User with id " + id + " does not exist.")
+                );
     }
 
     @Override
@@ -50,7 +59,7 @@ public class UserUseCase implements IUserServicePort {
             user.validateAdult();
         }
 
-        if (userPersistencePort.findOneById(user.getIdentificationNumber()).isPresent()) {
+        if (userPersistencePort.findOneByIdentificationNumber(user.getIdentificationNumber()).isPresent()) {
             throw new UserAlreadyExistsException("User identification already exists");
         }
 
