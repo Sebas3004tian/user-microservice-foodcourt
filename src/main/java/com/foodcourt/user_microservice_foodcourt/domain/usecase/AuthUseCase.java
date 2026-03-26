@@ -34,6 +34,7 @@ public class AuthUseCase implements IAuthServicePort {
         }
 
         String token = jwtServicePort.generateToken(
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getRole().getName()

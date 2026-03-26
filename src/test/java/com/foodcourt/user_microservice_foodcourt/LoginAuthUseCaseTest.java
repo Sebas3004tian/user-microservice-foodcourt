@@ -57,7 +57,7 @@ class LoginAuthUseCaseTest {
         when(passwordEncoderPort.matches("123456", "encryptedPassword"))
                 .thenReturn(true);
 
-        when(jwtServicePort.generateToken(anyString(), anyString(), anyString()))
+        when(jwtServicePort.generateToken(anyLong(),anyString(), anyString(), anyString()))
                 .thenReturn("fake-jwt-token");
 
         AuthResponse authResponse = authUseCase.login(new LoginRequest ("test@test.com", "123456"));
@@ -69,6 +69,7 @@ class LoginAuthUseCaseTest {
         verify(userPersistencePort).findOneByEmail("test@test.com");
         verify(passwordEncoderPort).matches("123456", "encryptedPassword");
         verify(jwtServicePort).generateToken(
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getRole().getName()
@@ -87,7 +88,7 @@ class LoginAuthUseCaseTest {
                 () -> authUseCase.login(loginRequest));
 
         verify(passwordEncoderPort, never()).matches(any(), any());
-        verify(jwtServicePort, never()).generateToken(any(), any(), any());
+        verify(jwtServicePort, never()).generateToken(anyLong(),any(), any(), any());
     }
 
     @Test
@@ -117,6 +118,6 @@ class LoginAuthUseCaseTest {
         assertThrows(RuntimeException.class,
                 () -> authUseCase.login(loginRequest));
 
-        verify(jwtServicePort, never()).generateToken(any(), any(), any());
+        verify(jwtServicePort, never()).generateToken(anyLong(),any(), any(), any());
     }
 }

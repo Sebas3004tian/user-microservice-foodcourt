@@ -10,7 +10,7 @@ public class JwtServiceAdapter implements IJwtServicePort {
     private final TokenUtils tokenUtils;
 
     @Override
-    public String generateToken(String name, String email, String role) {
-        return tokenUtils.createToken(name, email, role);
+    public String generateToken(Long id, String name, String email, String role) {
+        return tokenUtils.createToken(id, name, email, role);
     }
 }
