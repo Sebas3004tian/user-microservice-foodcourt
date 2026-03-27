@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserRestController {
     private final IUserHandler userHandler;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
     @GetMapping("/{id}/role")
     @Operation(summary = "Get the role of some user with the user Id")
     @ApiResponses(value = {
