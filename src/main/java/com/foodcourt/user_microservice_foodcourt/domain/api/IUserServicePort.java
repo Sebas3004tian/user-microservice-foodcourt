@@ -4,7 +4,7 @@ import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 
 public interface IUserServicePort {
     String getUserRoleById(Long id);
-    void createOwner(User user);
-    void createEmployee(User user);
-    void createClient(User user);
+    User createOwner(User user);
+    User createEmployee(User user);
+    User createClient(User user);
 }
