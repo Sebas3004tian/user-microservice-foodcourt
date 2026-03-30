@@ -3,6 +3,7 @@ package com.foodcourt.user_microservice_foodcourt.infrastructure.input.rest;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateClientRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
+import com.foodcourt.user_microservice_foodcourt.application.dto.response.CreateUserResponseDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserRestController {
     private final IUserHandler userHandler;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
     @GetMapping("/{id}/role")
     @Operation(summary = "Get the role of some user with the user Id")
     @ApiResponses(value = {
@@ -41,9 +42,9 @@ public class UserRestController {
             @ApiResponse(responseCode = "403", description = "Access Denied"),
             @ApiResponse(responseCode = "409", description = "User already exists")
     })
-    public ResponseEntity<Void> createOwner(@Valid @RequestBody CreateOwnerRequestDto ownerRequestDto){
-        userHandler.createOwner(ownerRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CreateUserResponseDto> createOwner(@Valid @RequestBody CreateOwnerRequestDto ownerRequestDto){
+        CreateUserResponseDto userResponseDto =  userHandler.createOwner(ownerRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
@@ -55,9 +56,9 @@ public class UserRestController {
             @ApiResponse(responseCode = "403", description = "Access Denied"),
             @ApiResponse(responseCode = "409", description = "User already exists")
     })
-    public ResponseEntity<Void> createEmployee(@Valid @RequestBody CreateEmployeeRequestDto employeeRequestDto){
-        userHandler.createEmployee(employeeRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CreateUserResponseDto> createEmployee(@Valid @RequestBody CreateEmployeeRequestDto employeeRequestDto) {
+        CreateUserResponseDto userResponseDto = userHandler.createEmployee(employeeRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @PostMapping("/client")
@@ -68,8 +69,8 @@ public class UserRestController {
             @ApiResponse(responseCode = "403", description = "Access Denied"),
             @ApiResponse(responseCode = "409", description = "User already exists")
     })
-    public ResponseEntity<Void> createClient(@Valid @RequestBody CreateClientRequestDto createClientRequestDto){
-        userHandler.createClient(createClientRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CreateUserResponseDto> createClient(@Valid @RequestBody CreateClientRequestDto createClientRequestDto){
+        CreateUserResponseDto userResponseDto =  userHandler.createClient(createClientRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 }

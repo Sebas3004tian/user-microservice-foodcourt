@@ -3,8 +3,10 @@ package com.foodcourt.user_microservice_foodcourt.application.handler.impl;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateClientRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateEmployeeRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.CreateOwnerRequestDto;
+import com.foodcourt.user_microservice_foodcourt.application.dto.response.CreateUserResponseDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IUserHandler;
 import com.foodcourt.user_microservice_foodcourt.application.mapper.IUserRequestMapper;
+import com.foodcourt.user_microservice_foodcourt.application.mapper.IUserResponseMapper;
 import com.foodcourt.user_microservice_foodcourt.domain.api.IUserServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class UserHandler implements IUserHandler {
 
     private final IUserServicePort userServicePort;
     private final IUserRequestMapper userRequestMapper;
+    private final IUserResponseMapper userResponseMapper;
 
     @Override
     public String getUserRoleById(Long id){
@@ -25,20 +28,21 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
-    public void createOwner(CreateOwnerRequestDto ownerRequestDto) {
+    public CreateUserResponseDto createOwner(CreateOwnerRequestDto ownerRequestDto) {
         User user = userRequestMapper.toOwner(ownerRequestDto);
-        userServicePort.createOwner(user);
+        return userResponseMapper.toResponse( userServicePort.createOwner(user));
     }
 
     @Override
-    public void createEmployee(CreateEmployeeRequestDto employeeRequestDto){
+    public CreateUserResponseDto createEmployee(CreateEmployeeRequestDto employeeRequestDto){
         User user = userRequestMapper.toEmployee(employeeRequestDto);
-        userServicePort.createEmployee(user);
+        return userResponseMapper.toResponse(userServicePort.createEmployee(user));
     }
 
     @Override
-    public void createClient(CreateClientRequestDto createClientRequestDto){
+    public CreateUserResponseDto createClient(CreateClientRequestDto createClientRequestDto){
         User user = userRequestMapper.toClient(createClientRequestDto);
-        userServicePort.createClient(user);
+        return userResponseMapper.toResponse(userServicePort.createClient(user));
     }
+
 }

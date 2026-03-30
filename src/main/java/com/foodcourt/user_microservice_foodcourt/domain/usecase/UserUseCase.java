@@ -31,21 +31,21 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void createOwner(User user) {
-        createUserWithRole(user, "PROPIETARIO", true);
+    public User createOwner(User user) {
+        return createUserWithRole(user, "PROPIETARIO", true);
     }
 
     @Override
-    public void createEmployee(User user) {
-        createUserWithRole(user, "EMPLEADO", false);
+    public User createEmployee(User user) {
+        return createUserWithRole(user, "EMPLEADO", false);
     }
 
     @Override
-    public void createClient(User user){
-        createUserWithRole(user, "CLIENTE",false);
+    public User createClient(User user){
+        return createUserWithRole(user, "CLIENTE",false);
     }
 
-    private void createUserWithRole(User user, String roleName, boolean validateAdult) {
+    private User createUserWithRole(User user, String roleName, boolean validateAdult) {
 
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
 
@@ -71,6 +71,6 @@ public class UserUseCase implements IUserServicePort {
             throw new UserAlreadyExistsException("User phone number already exists");
         }
 
-        userPersistencePort.createUser(user);
+        return userPersistencePort.createUser(user);
     }
 }
