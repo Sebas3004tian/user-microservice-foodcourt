@@ -1,5 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.configuration;
 
+import com.foodcourt.user_microservice_foodcourt.domain.model.UserRole;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.exception.RoleNotFoundException;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.entity.RoleEntity;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.entity.UserEntity;
@@ -14,35 +15,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class DataInitializer {
 
-
-    private static final String ADMIN_ROLE = "ADMIN";
-    private static final String OWNER_ROLE = "PROPIETARIO";
-    private static final String EMPLOYEE_ROLE = "EMPLEADO";
-    private static final String CLIENT_ROLE = "CLIENTE";
-
-
-
     @Bean
     @Order(1)
     CommandLineRunner initRoles(IRoleRepository roleRepository) {
         return args -> {
 
-
-            boolean adminRoleExists = roleRepository.findOneByName(ADMIN_ROLE).isPresent();
+            boolean adminRoleExists = roleRepository.findOneByName(UserRole.ADMIN.name()).isPresent();
             if(!adminRoleExists){
-                roleRepository.save(new RoleEntity(ADMIN_ROLE));
+                roleRepository.save(new RoleEntity(UserRole.ADMIN.name()));
             }
-            boolean ownerRoleExists = roleRepository.findOneByName(OWNER_ROLE).isPresent();
+            boolean ownerRoleExists = roleRepository.findOneByName(UserRole.PROPIETARIO.name()).isPresent();
             if(!ownerRoleExists){
-                roleRepository.save(new RoleEntity(OWNER_ROLE));
+                roleRepository.save(new RoleEntity(UserRole.PROPIETARIO.name()));
             }
-            boolean employeeRoleExists = roleRepository.findOneByName(EMPLOYEE_ROLE).isPresent();
+            boolean employeeRoleExists = roleRepository.findOneByName(UserRole.EMPLEADO.name()).isPresent();
             if(!employeeRoleExists){
-                roleRepository.save(new RoleEntity(EMPLOYEE_ROLE));
+                roleRepository.save(new RoleEntity(UserRole.EMPLEADO.name()));
             }
-            boolean clientRoleExists = roleRepository.findOneByName(CLIENT_ROLE).isPresent();
+            boolean clientRoleExists = roleRepository.findOneByName(UserRole.CLIENTE.name()).isPresent();
             if(!clientRoleExists){
-                roleRepository.save(new RoleEntity(CLIENT_ROLE));
+                roleRepository.save(new RoleEntity(UserRole.CLIENTE.name()));
             }
         };
     }
@@ -61,7 +53,7 @@ public class DataInitializer {
             boolean exists = userRepository.findOneByEmail(adminEmail).isPresent();
 
             if (!exists) {
-                RoleEntity adminRole = roleRepository.findOneByName("ADMIN")
+                RoleEntity adminRole = roleRepository.findOneByName(UserRole.ADMIN.name())
                         .orElseThrow(() -> new RoleNotFoundException("Role ADMIN not found"));
 
                 UserEntity admin = new UserEntity();

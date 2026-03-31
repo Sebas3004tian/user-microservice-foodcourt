@@ -3,7 +3,6 @@ package com.foodcourt.user_microservice_foodcourt.infrastructure.input.rest;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.LoginRequestDto;
 import com.foodcourt.user_microservice_foodcourt.application.dto.request.LoginResponseDto;
 import com.foodcourt.user_microservice_foodcourt.application.handler.IAuthHandler;
-import com.foodcourt.user_microservice_foodcourt.domain.model.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

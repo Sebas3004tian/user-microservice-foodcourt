@@ -1,7 +1,6 @@
 package com.foodcourt.user_microservice_foodcourt.infrastructure.security;
 
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.output.security.adapter.JwtServiceAdapter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
