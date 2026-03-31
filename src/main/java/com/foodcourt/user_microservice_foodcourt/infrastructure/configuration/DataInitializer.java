@@ -21,6 +21,7 @@ public class DataInitializer {
     private static final String CLIENT_ROLE = "CLIENTE";
 
 
+
     @Bean
     @Order(1)
     CommandLineRunner initRoles(IRoleRepository roleRepository) {

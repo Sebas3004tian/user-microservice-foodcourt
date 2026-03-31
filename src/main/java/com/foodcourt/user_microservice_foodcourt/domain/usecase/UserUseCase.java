@@ -23,8 +23,16 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
+    public String getUserNumberPhone(Long id) {
+        return userPersistencePort.findUserNumberPhoneById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User with id " + id + " does not exist.")
+                );
+    }
+
+    @Override
     public String getUserRoleById(Long id){
-        return userPersistencePort.getUserRoleById(id)
+        return userPersistencePort.findUserRoleById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException("User with id " + id + " does not exist.")
                 );
@@ -55,7 +63,7 @@ public class UserUseCase implements IUserServicePort {
         user.setPassword(encryptedPassword);
         user.setRole(role);
 
-        if (validateAdult) {
+        if (validateAdult) {//problema solo debe de ser para propietario
             user.validateAdult();
         }
 

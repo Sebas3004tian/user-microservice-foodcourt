@@ -8,13 +8,15 @@ import java.util.Optional;
 
 public interface IUserRepository extends JpaRepository<UserEntity, Long> {
 
+    @Query("SELECT u.phoneNumber FROM UserEntity u WHERE u.id = :id")
+    Optional<String> findPhoneNumberById(Long id);
 
     @Query("""
     SELECT r.name
     FROM UserEntity u
     JOIN u.role r
     WHERE u.id = :id
-""")
+    """)
     Optional<String> findRoleByUserId(Long id);
     Optional<UserEntity> findOneByIdentificationNumber(Long email);
     Optional<UserEntity> findOneByEmail(String email);

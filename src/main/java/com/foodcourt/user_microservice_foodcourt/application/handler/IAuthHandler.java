@@ -1,8 +1,9 @@
 package com.foodcourt.user_microservice_foodcourt.application.handler;
 
-import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
-import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.LoginRequestDto;
+import com.foodcourt.user_microservice_foodcourt.application.dto.request.LoginResponseDto;
+import com.foodcourt.user_microservice_foodcourt.domain.model.LoginResponse;
 
 public interface IAuthHandler {
-    AuthResponse login(LoginRequest request);
+    LoginResponseDto login(LoginRequestDto loginRequestDto);
 }
