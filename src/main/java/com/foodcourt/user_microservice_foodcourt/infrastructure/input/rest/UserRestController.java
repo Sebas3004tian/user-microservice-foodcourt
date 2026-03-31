@@ -58,8 +58,8 @@ public class UserRestController {
         CreateUserResponseDto userResponseDto =  userHandler.createOwner(ownerRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
+    
+    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/employee")
     @Operation(summary = "Create an employee user")
     @ApiResponses(value = {
