@@ -40,20 +40,21 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public User createOwner(User user) {
-        return createUserWithRole(user, "PROPIETARIO", true);
+        user.validateAdult();
+        return createUserWithRole(user, "PROPIETARIO");
     }
 
     @Override
     public User createEmployee(User user) {
-        return createUserWithRole(user, "EMPLEADO", false);
+        return createUserWithRole(user, "EMPLEADO");
     }
 
     @Override
     public User createClient(User user){
-        return createUserWithRole(user, "CLIENTE",false);
+        return createUserWithRole(user, "CLIENTE");
     }
 
-    private User createUserWithRole(User user, String roleName, boolean validateAdult) {
+    private User createUserWithRole(User user, String roleName) {
 
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
 
@@ -62,10 +63,6 @@ public class UserUseCase implements IUserServicePort {
 
         user.setPassword(encryptedPassword);
         user.setRole(role);
-
-        if (validateAdult) {//problema solo debe de ser para propietario
-            user.validateAdult();
-        }
 
         if (userPersistencePort.findOneByIdentificationNumber(user.getIdentificationNumber()).isPresent()) {
             throw new UserAlreadyExistsException("User identification already exists");
