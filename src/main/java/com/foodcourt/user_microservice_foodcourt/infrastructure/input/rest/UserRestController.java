@@ -21,6 +21,18 @@ import org.springframework.web.bind.annotation.*;
 public class UserRestController {
     private final IUserHandler userHandler;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO', 'EMPLEADO')")
+    @GetMapping("/{id}/phone")
+    @Operation(summary = "Get the phone number of some user with the user Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The server has responded to the user's phone number."),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
+            @ApiResponse(responseCode = "409", description = "User not found")
+    })
+    public ResponseEntity<String> getUserNumberPhone(@PathVariable Long id){
+        return ResponseEntity.ok(userHandler.getUserNumberPhone(id));
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
     @GetMapping("/{id}/role")
     @Operation(summary = "Get the role of some user with the user Id")
@@ -47,7 +59,7 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
+    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/employee")
     @Operation(summary = "Create an employee user")
     @ApiResponses(value = {
