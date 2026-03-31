@@ -58,7 +58,7 @@ public class UserRestController {
         CreateUserResponseDto userResponseDto =  userHandler.createOwner(ownerRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
-    
+
     @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/employee")
     @Operation(summary = "Create an employee user")
