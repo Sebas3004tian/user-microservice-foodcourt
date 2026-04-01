@@ -82,11 +82,6 @@ class CreateOwnerUseCaseTest {
                 "123456",
                 role
         );
-        when(rolePersistencePort.findOneByName("PROPIETARIO"))
-                .thenReturn(Optional.of(role));
-
-        when(passwordEncoderPort.encode(anyString()))
-                .thenReturn("encryptedPassword");
 
         assertThrows(UnderageUserException.class, () -> {
             userUseCase.createOwner(user);
