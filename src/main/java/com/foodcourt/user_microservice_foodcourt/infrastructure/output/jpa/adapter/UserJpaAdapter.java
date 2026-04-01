@@ -17,6 +17,11 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final IUserEntityMapper userEntityMapper;
 
     @Override
+    public Optional<String> findUserEmailById(Long id) {
+        return userRepository.findEmailById(id);
+    }
+
+    @Override
     public Optional<String> findUserNumberPhoneById(Long id) {
         return userRepository.findPhoneNumberById(id);
     }

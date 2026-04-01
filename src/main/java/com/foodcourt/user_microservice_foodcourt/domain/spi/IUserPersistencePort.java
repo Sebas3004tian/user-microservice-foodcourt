@@ -5,6 +5,8 @@ import com.foodcourt.user_microservice_foodcourt.domain.model.User;
 import java.util.Optional;
 
 public interface IUserPersistencePort {
+
+    Optional<String> findUserEmailById(Long id);
     Optional<String> findUserNumberPhoneById(Long id);
     Optional<String> findUserRoleById(Long id);
     Optional<User> findOneById(Long id);

@@ -23,10 +23,18 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
+    public String getUserEmail(Long id) {
+        return userPersistencePort.findUserEmailById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException(id)
+                );
+    }
+
+    @Override
     public String getUserNumberPhone(Long id) {
         return userPersistencePort.findUserNumberPhoneById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException("User with id " + id + " does not exist.")
+                        new UserNotFoundException(id)
                 );
     }
 
@@ -34,7 +42,7 @@ public class UserUseCase implements IUserServicePort {
     public String getUserRoleById(Long id){
         return userPersistencePort.findUserRoleById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException("User with id " + id + " does not exist.")
+                        new UserNotFoundException(id)
                 );
     }
 

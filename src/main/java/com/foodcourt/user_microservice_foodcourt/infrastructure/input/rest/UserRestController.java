@@ -19,7 +19,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserRestController {
+
     private final IUserHandler userHandler;
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO', 'EMPLEADO','CLIENTE')")
+    @GetMapping("/{id}/email")
+    @Operation(summary = "Get the email of some user with the user Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The server has responded to the user's email."),
+            @ApiResponse(responseCode = "403", description = "Access Denied"),
+            @ApiResponse(responseCode = "409", description = "User not found")
+    })
+    public ResponseEntity<String> getUserEmail(@PathVariable Long id){
+        return ResponseEntity.ok(userHandler.getUserEmail(id));
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO', 'EMPLEADO','CLIENTE')")
     @GetMapping("/{id}/phone")
