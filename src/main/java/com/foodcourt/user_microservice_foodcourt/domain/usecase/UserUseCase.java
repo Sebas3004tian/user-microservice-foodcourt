@@ -23,6 +23,14 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
+    public String getUserEmail(Long id) {
+        return userPersistencePort.findUserEmailById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User with id " + id + " does not exist.")
+                );
+    }
+
+    @Override
     public String getUserNumberPhone(Long id) {
         return userPersistencePort.findUserNumberPhoneById(id)
                 .orElseThrow(() ->
