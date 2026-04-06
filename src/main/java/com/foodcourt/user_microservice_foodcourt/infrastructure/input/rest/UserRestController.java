@@ -46,7 +46,7 @@ public class UserRestController {
         return ResponseEntity.ok(userHandler.getUserNumberPhone(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROPIETARIO', 'EMPLEADO','CLIENTE')")
     @GetMapping("/{id}/role")
     @Operation(summary = "Get the role of some user with the user Id")
     @ApiResponses(value = {
