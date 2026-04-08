@@ -15,8 +15,7 @@ import com.foodcourt.user_microservice_foodcourt.infrastructure.output.security.
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.adapter.UserJpaAdapter;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.mapper.IUserEntityMapper;
 import com.foodcourt.user_microservice_foodcourt.infrastructure.output.jpa.repository.IUserRepository;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.security.BCryptPasswordEncoderAdapter;
-import com.foodcourt.user_microservice_foodcourt.infrastructure.security.TokenUtils;
+import com.foodcourt.user_microservice_foodcourt.infrastructure.output.security.adapter.BCryptPasswordEncoderAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,6 @@ public class BeanConfiguration {
     private final IRoleRepository roleRepository;
     private final IUserEntityMapper userEntityMapper;
     private final IRoleEntityMapper roleEntityMapper;
-    private final TokenUtils tokenUtils;
 
     @Bean
     public IUserPersistencePort userPersistencePort(){
@@ -38,13 +36,12 @@ public class BeanConfiguration {
 
     @Bean
     public IRolePersistencePort rolePersistencePort(){
-
         return new RoleJpaAdapter(roleRepository,roleEntityMapper);
     }
 
     @Bean
     public IJwtServicePort jwtServicePort(){
-        return new JwtServiceAdapter(tokenUtils);
+        return new JwtServiceAdapter();
     }
 
     @Bean

@@ -28,6 +28,16 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
+    public String getUserNumberPhone(Long id) {
+        return userServicePort.getUserNumberPhone(id);
+    }
+
+    @Override
+    public String getUserEmail(Long id) {
+        return userServicePort.getUserEmail(id);
+    }
+
+    @Override
     public CreateUserResponseDto createOwner(CreateOwnerRequestDto ownerRequestDto) {
         User user = userRequestMapper.toOwner(ownerRequestDto);
         return userResponseMapper.toResponse( userServicePort.createOwner(user));

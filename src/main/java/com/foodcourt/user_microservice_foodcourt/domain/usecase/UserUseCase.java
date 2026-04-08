@@ -23,29 +23,46 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public String getUserRoleById(Long id){
-        return userPersistencePort.getUserRoleById(id)
+    public String getUserEmail(Long id) {
+        return userPersistencePort.findUserEmailById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException("User with id " + id + " does not exist.")
+                        new UserNotFoundException(id)
+                );
+    }
+
+    @Override
+    public String getUserNumberPhone(Long id) {
+        return userPersistencePort.findUserNumberPhoneById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException(id)
+                );
+    }
+
+    @Override
+    public String getUserRoleById(Long id){
+        return userPersistencePort.findUserRoleById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException(id)
                 );
     }
 
     @Override
     public User createOwner(User user) {
-        return createUserWithRole(user, "PROPIETARIO", true);
+        user.validateAdult();
+        return createUserWithRole(user, "PROPIETARIO");
     }
 
     @Override
     public User createEmployee(User user) {
-        return createUserWithRole(user, "EMPLEADO", false);
+        return createUserWithRole(user, "EMPLEADO");
     }
 
     @Override
     public User createClient(User user){
-        return createUserWithRole(user, "CLIENTE",false);
+        return createUserWithRole(user, "CLIENTE");
     }
 
-    private User createUserWithRole(User user, String roleName, boolean validateAdult) {
+    private User createUserWithRole(User user, String roleName) {
 
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
 
@@ -54,10 +71,6 @@ public class UserUseCase implements IUserServicePort {
 
         user.setPassword(encryptedPassword);
         user.setRole(role);
-
-        if (validateAdult) {
-            user.validateAdult();
-        }
 
         if (userPersistencePort.findOneByIdentificationNumber(user.getIdentificationNumber()).isPresent()) {
             throw new UserAlreadyExistsException("User identification already exists");

@@ -2,7 +2,7 @@ package com.foodcourt.user_microservice_foodcourt.domain.usecase;
 
 import com.foodcourt.user_microservice_foodcourt.domain.exception.InvalidCredentialsException;
 import com.foodcourt.user_microservice_foodcourt.domain.api.IAuthServicePort;
-import com.foodcourt.user_microservice_foodcourt.domain.model.AuthResponse;
+import com.foodcourt.user_microservice_foodcourt.domain.model.LoginResponse;
 import com.foodcourt.user_microservice_foodcourt.domain.model.LoginRequest;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IJwtServicePort;
 import com.foodcourt.user_microservice_foodcourt.domain.spi.IPasswordEncoderPort;
@@ -24,7 +24,7 @@ public class AuthUseCase implements IAuthServicePort {
 
 
     @Override
-    public AuthResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         User user = userPersistencePort.findOneByEmail(request.getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("User not found, check credentials"));
@@ -33,13 +33,13 @@ public class AuthUseCase implements IAuthServicePort {
             throw new InvalidCredentialsException("Invalid credentials");
         }
 
-        String token = jwtServicePort.generateToken(
+        String token = jwtServicePort.createToken(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getRole().getName()
         );
 
-        return new AuthResponse(token);
+        return new LoginResponse(token);
     }
 }

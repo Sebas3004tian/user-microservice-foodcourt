@@ -10,4 +10,6 @@ public interface IUserHandler {
     CreateUserResponseDto createEmployee(CreateEmployeeRequestDto employeeRequestDto);
     CreateUserResponseDto createClient(CreateClientRequestDto createClientRequestDto);
     String getUserRoleById(Long id);
+    String getUserNumberPhone(Long id);
+    String getUserEmail(Long id);
 }
